@@ -1,4 +1,1 @@
-exec(open('./wifi.py').read(),globals())
-
-
-
+exec(open('./mqtt.py').read(),globals())
