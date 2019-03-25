@@ -1,1 +1,1 @@
-{"AP_PASSWORD": "12345678", "ESSID": "SI2", "MQTT_Topic": "cs", "MQTT_PORT": 1883, "USER": "admin", "AP": "False", "PASSWORD": "13065567477", "MQTT_USER": "LOOG", "PASS": "admin", "MQTT": "192.168.2.1", "MQTT_PASS": "110", "AP_ESSID": "ESP_"}
+{"AP_PASSWORD": "12345678", "ESSID": "SSID", "MQTT_Topic": "NEW", "MQTT_PORT": 1883, "USER": "admin", "AP": "False", "PASSWORD": "PASS", "MQTT_USER": "LOOG", "PASS": "admin", "MQTT": "192.168.2.1", "MQTT_PASS": "110", "AP_ESSID": "ESP_"}
