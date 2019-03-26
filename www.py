@@ -1,7 +1,5 @@
 from machine import Pin,Timer
 import socket,sys,machine,gc,time,json
-
-
 html= '''<!DOCTYPE html>
 <html>
 <head>
@@ -96,7 +94,7 @@ def www():
     else:
               check='checked="checked"'
 
-    response =  html % (LedState, clou, textd, setting['ESSID'], setting['PASSWORD'], setting['AP_PASSWORD'], check, setting['MQTT_Topic'])
+    response =  html % (LedState, clou, textd, setting['ESSID'], setting['PASSWORD'], setting['AP_PASSWORD'], setting['MQTT_Topic'], check)
     cl.sendall(response)
     cl.close()
 www()
