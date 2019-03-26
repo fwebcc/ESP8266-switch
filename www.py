@@ -18,10 +18,10 @@ html= '''<!DOCTYPE html>
             <hr>
 <form action="/" method="get">
             <h5>SSID：<input type="text" name="ESSID" value= %s /></h5>
-            <h5>PASS：<input type="password" name="PASSWORD" value= %s /></h5>
-            <h5>AP WIFI PASS：<input type="password" name="AP_PASSWORD" value= %s /> </h5>
+            <h5>PASS：<input type="text" name="PASSWORD" value= %s /></h5>
+            <h5>AP WIFI PASS：<input type="text" name="AP_PASSWORD" value= %s /> </h5>
+            <p>主题: <input type="text" name="MQTT_Topic" value= %s /> </p>
             <p>OPEN AP:<input type="checkbox" name="AP" value="True" %s /></p>
-            <p>MAC: %s </p>
             <input type="submit" value="保存" />
 </form>
 
@@ -78,7 +78,7 @@ def www():
            APS= vurl['AP']
         else:
            APS= 'False'
-        VAL='[["ESSID":"'+vurl['ESSID']+'"],["PASSWORD":"'+vurl['PASSWORD']+'"],["AP_PASSWORD":"'+vurl['AP_PASSWORD']+'"],["AP":"'+APS+'"]]'
+        VAL='[["ESSID":"'+vurl['ESSID']+'"],["PASSWORD":"'+vurl['PASSWORD']+'"],["AP_PASSWORD":"'+vurl['AP_PASSWORD']+'"],["MQTT_Topic":"'+vurl['MQTT_Topic']+'"],["AP":"'+APS+'"]]'
         #print(VAL)
         json_writes("Settings.json",VAL)
     #开关按钮控制
@@ -96,7 +96,7 @@ def www():
     else:
               check='checked="checked"'
 
-    response =  html % (LedState, clou, textd, setting['ESSID'], setting['PASSWORD'], setting['AP_PASSWORD'], check, mymac)
+    response =  html % (LedState, clou, textd, setting['ESSID'], setting['PASSWORD'], setting['AP_PASSWORD'], check, setting['MQTT_Topic'])
     cl.sendall(response)
     cl.close()
 www()
