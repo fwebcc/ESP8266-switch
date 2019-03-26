@@ -54,9 +54,6 @@ def Button_s():
         else:
             if  Time_c > 250:
                  print('执行重启任务')
-                 tim1.deinit()
-                 tim2.deinit()
-                 tim3.deinit()
                  machine.reset()
                  Time_c =0
         Time_c +=1
