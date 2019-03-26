@@ -11,8 +11,13 @@ led=Pin(12,Pin.OUT, value=0)
 Button = Pin(14,Pin.IN, value=0)
 #网络定义
 wlan = network.WLAN(network.STA_IF)
-wlan.active(True)
-wlan.config(dhcp_hostname=setting['MQTT_Topic'])
+wlan.active(False)
+def do_connect():
+    wlan.active(True)
+    wlan.config(dhcp_hostname=setting['MQTT_Topic'])
+    if not wlan.isconnected():
+            wlan.connect(setting['ESSID'], setting['PASSWORD'])
+    print('network config:', wlan.ifconfig(),wlan.config('dhcp_hostname'))
 #链接MQTT服务器参数
 c = MQTTClient('ESP8266_'+setting['MQTT_Topic']+'', setting['MQTT'],setting['MQTT_PORT'],setting['MQTT_Topic'],setting['MQTT_PASS'])
 #c.connect()
@@ -59,25 +64,6 @@ def Button_s():
         Time_c +=1
    else:
         Time_c =0
-#判断有无网络
-def IF_NETWORK():
-    if setting['AP'] ==  'False':
-      if not wlan.isconnected:
-        print('网络已断开')
-        wlan.connect(setting['ESSID'], setting['PASSWORD'])
-        while not wlan.isconnected():
-            pass
-        heartbeat()
-        print('network config:', wlan.ifconfig())
-    else:
-      print('AP模式')
-      tim2.deinit()
-      tim3.deinit()
-      wlan.active(False)
-      ap_if = network.WLAN(network.AP_IF)
-      ap_if.active(True)
-      ap_if.config(essid='AP_'+setting['MQTT_Topic'],password=setting['AP_PASSWORD'])
-      print('AP START MODE network...','network config:',ap_if.ifconfig())
 #有无网络启动
 def heartbeat():
    try:
@@ -88,6 +74,25 @@ def heartbeat():
    except OSError:
        print('无网络_心跳传输')
 heartbeat()
+#判断有无网络
+def IF_NETWORK():
+    if setting['AP'] ==  'False':
+      if wlan.ifconfig()[0] == '0.0.0.0':
+        print('开启网络链接...')
+        do_connect()
+        heartbeat()
+        print('network config:', wlan.ifconfig())
+      else:
+        print('网络正常')
+    else:
+      print('AP模式')
+      wlan.active(False)
+      ap_if = network.WLAN(network.AP_IF)
+      ap_if.active(True)
+      ap_if.config(essid='AP_'+setting['MQTT_Topic'],password=setting['AP_PASSWORD'])
+      print('AP START MODE network...','network config:',ap_if.ifconfig())
+IF_NETWORK()
+
 
 #定时执行接收信息
 Time_d =0
@@ -120,5 +125,5 @@ tim.init(period=500, mode=Timer.PERIODIC, callback=lambda t:Button_s())
 tim2 = Timer(-1)
 tim2.init(period=1000, mode=Timer.PERIODIC, callback=lambda t:UP_MQTT())
 tim3 = Timer(-1)
-tim3.init(period=30000, mode=Timer.PERIODIC, callback=lambda t:IF_NETWORK())
+tim3.init(period=10000, mode=Timer.PERIODIC, callback=lambda t:IF_NETWORK())
 print('MQTT START')
