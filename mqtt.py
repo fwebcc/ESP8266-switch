@@ -81,7 +81,6 @@ def IF_NETWORK():
         print('开启网络链接...')
         do_connect()
         heartbeat()
-        print('network config:', wlan.ifconfig())
       else:
         print('网络正常')
     else:
