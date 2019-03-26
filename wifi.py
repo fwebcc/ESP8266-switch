@@ -9,13 +9,9 @@ setting = json.load(f)
 #mymac = ('%02x-%02x-%02x-%02x-%02x-%02x') %(s[0],s[1],s[2],s[3],s[4],s[5])
 #开启WIFI链接
 def GO_wifi():
-    if setting['AP'] ==  'False':
-       ap_if = network.WLAN(network.AP_IF)
-       ap_if.active(False)
-    else:
        wlan = network.WLAN(network.STA_IF)
-       wlan.active(False)
-       if wlan.ifconfig()[0] == '0.0.0.0':
+       if not wlan.isconnected():
+          wlan.active(False)
           wlan.active(True)
           wlan.config(dhcp_hostname=setting['MQTT_Topic'])
           wlan.connect(setting['ESSID'], setting['PASSWORD'])
@@ -32,8 +28,7 @@ def AP_START():
         ap_if.config(essid='AP_'+setting['MQTT_Topic'],password=setting['AP_PASSWORD'])
         print('AP START MODE network...')
         print('network config:',ap_if.ifconfig())
-        #exec(open('./switch.py').read(),globals())
-        #exec(open('./www.py').read(),globals())
+        exec(open('./mqtt.py').read(),globals())
 #判断网络链接是否开启
 def DO_WIFI():
     if setting['AP'] ==  'False':
@@ -43,5 +38,3 @@ def DO_WIFI():
         AP_START()
         print('AP_START')
 DO_WIFI()
-exec(open('./mqtt.py').read(),globals())
-exec(open('./www.py').read(),globals())
