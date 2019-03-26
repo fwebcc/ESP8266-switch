@@ -1,7 +1,6 @@
 from machine import Pin,Timer
 import socket,sys,machine,gc,time,json
-#接口定义
-led=Pin(12,Pin.OUT, value=0)
+
 
 html= '''<!DOCTYPE html>
 <html>
@@ -11,9 +10,7 @@ html= '''<!DOCTYPE html>
 </head>
 <body>
 <div style="width:400px; margin:0 auto">
-<div style="background:#d9edf7; color:#31708f; border-radius:5px; paddin'
->>> 3
-检查网络信�g: 5px"">
+<div style="background:#d9edf7; color:#31708f; border-radius:5px; padding: 5px"">
             <h5>开关状态：<a href="/LED=%s"><button style="background:%s">%s</button></a> </h5>
 </div><br>
 <div style="background:#dff0d8; color:#3c763d; border-radius:5px; padding: 10px"">
@@ -21,12 +18,13 @@ html= '''<!DOCTYPE html>
             <hr>
 <form action="/" method="get">
             <h5>SSID：<input type="text" name="ESSID" value= %s /></h5>
-            <h5>PASS：<input type="text" name="PASSWORD" value= %s /></h5>
-            <h5>AP WIFI PASS：<input type="text" name="AP_PASSWORD" value= %s /> </h5>
-            <p>主题: <input type="text" name="Topic" value= %s  /></p>
+            <h5>PASS：<input type="password" name="PASSWORD" value= %s /></h5>
+            <h5>AP WIFI PASS：<input type="password" name="AP_PASSWORD" value= %s /> </h5>
             <p>OPEN AP:<input type="checkbox" name="AP" value="True" %s /></p>
+            <p>MAC: %s </p>
             <input type="submit" value="保存" />
 </form>
+
 <h5>重启：<a href="/RESTART"><button >重启</button></a> </h5>
 </div>
 </div>
@@ -40,6 +38,7 @@ s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 s.bind(('0.0.0.0',80))
 s.listen(5)
 print('listening on', addr)
+
 #批量修改json文件
 def json_writes(ini_p,ini_k):
      f =open(ini_p,'rb')
@@ -52,6 +51,8 @@ def json_writes(ini_p,ini_k):
             fs.close()
      f.close()
      return 'OK'
+
+
 def www():
   while 1:
     f = open("Settings.json", encoding='utf-8')
@@ -77,9 +78,7 @@ def www():
            APS= vurl['AP']
         else:
            APS= 'False'
-        VAL='[["ESSID":"'+vurl['ESSID']+'"],["PASSWORD":"'+vurl['PA
-检查网络信息
-b'SSWORD']+'"],["AP_PASSWORD":"'+vurl['AP_PASSWORD']+'"],["MQTT_Topic":"'+vurl['Topic']+'"],["AP":"'+APS+'"]]'
+        VAL='[["ESSID":"'+vurl['ESSID']+'"],["PASSWORD":"'+vurl['PASSWORD']+'"],["AP_PASSWORD":"'+vurl['AP_PASSWORD']+'"],["AP":"'+APS+'"]]'
         #print(VAL)
         json_writes("Settings.json",VAL)
     #开关按钮控制
@@ -97,7 +96,7 @@ b'SSWORD']+'"],["AP_PASSWORD":"'+vurl['AP_PASSWORD']+'"],["MQTT_Topic":"'+vurl['
     else:
               check='checked="checked"'
 
-    response =  html % (LedState, clou, textd, setting['ESSID'], setting['PASSWORD'], setting['AP_PASSWORD'], setting['MQTT_Topic'], check)
+    response =  html % (LedState, clou, textd, setting['ESSID'], setting['PASSWORD'], setting['AP_PASSWORD'], check, mymac)
     cl.sendall(response)
     cl.close()
 www()
