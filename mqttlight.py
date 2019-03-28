@@ -20,10 +20,7 @@ def do_connect():
     wlan.config(dhcp_hostname=setting['MQTT_Topic'])
     if not wlan.isconnected():
             wlan.connect(setting['ESSID'], setting['PASSWORD'])
-    print('netw"
->>> 网络正常
-3
-接受网络信�ork config:', wlan.ifconfig(),wlan.config('dhcp_hostname'))
+    print('network config:', wlan.ifconfig(),wlan.config('dhcp_hostname'))
 #链接MQTT服务器参数
 c = MQTTClient('ESP8266_'+setting['MQTT_Topic']+'', setting['MQTT'],setting['MQTT_PORT'],setting['MQTT_Topic'],setting['MQTT_PASS'])
 #c.connect()
@@ -103,9 +100,7 @@ def Button_s():
    else:
         Time_c =0
 
-#有无网'
->>> 3
-接受网络信�络启动
+#有无网络启动
 def heartbeat():
    try:
        c.connect()
